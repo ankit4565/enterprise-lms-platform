@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="sourceDbValue" value="65030168-6aab-43d9-b8d5-50628d5710f1" />
+    <option name="sourceDiffType" value="DB" />
+    <option name="sourceModelValue" value="auth-service:auth-service" />
+    <option name="targetDbValue" value="65030168-6aab-43d9-b8d5-50628d5710f1" />
+  </component>
+</project>
