@@ -34,9 +34,11 @@ public class AuditLog {
     @Column(name = "entity_id", length = 100)
     private String entityId;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     @Column(name = "before", columnDefinition = "jsonb")
     private String beforeData;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     @Column(name = "after", columnDefinition = "jsonb")
     private String afterData;
 

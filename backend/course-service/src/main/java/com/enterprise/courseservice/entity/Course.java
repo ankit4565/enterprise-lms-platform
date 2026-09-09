@@ -62,6 +62,7 @@ public class Course extends BaseEntity {
     @Builder.Default
     private Long priceMinor = 0L;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.CHAR)
     @Column(nullable = false, length = 3)
     @Builder.Default
     private String currency = "INR";

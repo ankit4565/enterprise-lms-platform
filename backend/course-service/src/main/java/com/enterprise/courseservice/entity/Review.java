@@ -29,6 +29,7 @@ public class Review extends BaseEntity {
     @Column(name = "student_id", nullable = false)
     private UUID studentId;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.SMALLINT)
     @Column(nullable = false)
     private Integer rating;
 

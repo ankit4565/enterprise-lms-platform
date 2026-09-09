@@ -144,9 +144,39 @@ The User Service manages user public and private profiles, avatar hooks, communi
   - `is_approved` (BOOLEAN DEFAULT true)
   - `created_at`, `updated_at`, `version`
   - `UNIQUE (course_id, student_id)`
+- `assignments`
+  - `id` (UUID PK)
+  - `lesson_id` (UUID FK -> lessons.id ON DELETE CASCADE NOT NULL UNIQUE)
+  - `course_id` (UUID FK -> courses.id ON DELETE CASCADE NOT NULL)
+  - `title` (VARCHAR 200 NOT NULL)
+  - `instructions` (TEXT NOT NULL)
+  - `max_score` (INT DEFAULT 100)
+  - `due_at` (TIMESTAMPTZ)
+  - `allow_late` (BOOLEAN DEFAULT true)
+  - `late_penalty_percent` (INT DEFAULT 0)
+  - `allowed_file_types` (VARCHAR 255)
+  - `max_file_size_mb` (INT DEFAULT 50)
+  - `created_at`, `updated_at`, `version`
+- `assignment_submissions`
+  - `id` (UUID PK)
+  - `assignment_id` (UUID FK -> assignments.id ON DELETE CASCADE NOT NULL)
+  - `student_id` (UUID NOT NULL)
+  - `attempt_no` (INT DEFAULT 1)
+  - `text_answer` (TEXT)
+  - `file_urls` (TEXT)
+  - `status` (VARCHAR 30 CHECK IN ('SUBMITTED', 'UNDER_REVIEW', 'GRADED', 'RETURNED'))
+  - `is_late` (BOOLEAN DEFAULT false)
+  - `raw_score` (NUMERIC 6,2)
+  - `final_score` (NUMERIC 6,2)
+  - `feedback` (TEXT)
+  - `graded_by` (UUID)
+  - `graded_at` (TIMESTAMPTZ)
+  - `submitted_at` (TIMESTAMPTZ NOT NULL DEFAULT NOW())
+  - `created_at`, `updated_at`, `version`
+  - `UNIQUE (assignment_id, student_id, attempt_no)`
 
 ### Purpose
-The Course Service manages the core learning curriculum: categories, courses, position-ordered modules and lessons, student enrolments, lesson progress tracking (with video auto-completion at 90%), course completion calculation, and course ratings & reviews.
+The Course Service manages the core learning curriculum: categories, courses, position-ordered modules and lessons, student enrolments, lesson progress tracking (with video auto-completion at 90%), course completion calculation, course ratings & reviews, and assignment authoring, submission versioning, late penalty calculation, and instructor grading workflows.
 
 ---
 

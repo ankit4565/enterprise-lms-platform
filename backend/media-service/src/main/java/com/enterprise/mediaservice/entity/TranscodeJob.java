@@ -36,7 +36,8 @@ public class TranscodeJob {
     @Builder.Default
     private short attempt = 1;
 
-    @Column(name = "renditions", columnDefinition = "TEXT")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+    @Column(name = "renditions", columnDefinition = "jsonb")
     private String renditions;
 
     @Column(columnDefinition = "TEXT")

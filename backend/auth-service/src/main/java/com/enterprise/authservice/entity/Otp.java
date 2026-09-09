@@ -32,10 +32,12 @@ public class Otp {
     @Column(name = "code_hash", nullable = false, length = 128)
     private String codeHash;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.SMALLINT)
     @Column(nullable = false)
     @Builder.Default
     private Integer attempts = 0;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.SMALLINT)
     @Column(name = "max_attempts", nullable = false)
     @Builder.Default
     private Integer maxAttempts = 5;

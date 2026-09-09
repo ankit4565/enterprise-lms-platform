@@ -30,7 +30,8 @@ public class UploadSession {
     @Column(name = "upload_id", nullable = false, length = 255)
     private String uploadId;
 
-    @Column(name = "parts", columnDefinition = "TEXT")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+    @Column(name = "parts", columnDefinition = "jsonb")
     private String parts;
 
     @Column(name = "expires_at", nullable = false)

@@ -40,11 +40,16 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+      MANAGEMENT_HEALTH_MAIL_ENABLED: "false"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+      mailhog:
+        condition: service_started
 
   user-service:
     build:

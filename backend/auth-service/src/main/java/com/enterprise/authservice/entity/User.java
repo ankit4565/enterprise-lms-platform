@@ -46,6 +46,7 @@ public class User extends BaseEntity {
     @Column(name = "two_factor_secret", length = 64)
     private String twoFactorSecret;
 
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.SMALLINT)
     @Column(name = "failed_login_count", nullable = false)
     @Builder.Default
     private Integer failedLoginCount = 0;
