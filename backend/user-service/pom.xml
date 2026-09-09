@@ -9,9 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.enterprise</groupId>
-    
+
     <artifactId>user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    
     <name>user-service</name>
     <description>Enterprise LMS User &amp; Profile Service</description>
 
