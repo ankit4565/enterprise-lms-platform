@@ -24,7 +24,7 @@ spring:
         - id: course-service
           uri: ${COURSE_SERVICE_URL:http://localhost:8083}
           predicates:
-            - Path=/api/v1/courses/**
+            - Path=/api/v1/courses/**, /api/v1/categories/**, /api/v1/lessons/**, /api/v1/modules/**, /api/v1/enrolments/**, /api/v1/assignments/**, /api/v1/quizzes/**, /api/v1/admin/courses/**
 
         # Media Service
         - id: media-service

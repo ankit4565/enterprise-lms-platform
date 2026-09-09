@@ -174,9 +174,74 @@ The User Service manages user public and private profiles, avatar hooks, communi
   - `submitted_at` (TIMESTAMPTZ NOT NULL DEFAULT NOW())
   - `created_at`, `updated_at`, `version`
   - `UNIQUE (assignment_id, student_id, attempt_no)`
+- `quizzes`
+  - `id` (UUID PK)
+  - `lesson_id` (UUID FK -> lessons.id ON DELETE CASCADE NOT NULL UNIQUE)
+  - `course_id` (UUID FK -> courses.id ON DELETE CASCADE NOT NULL)
+  - `title` (VARCHAR 200 NOT NULL)
+  - `description` (TEXT)
+  - `time_limit_minutes` (INT)
+  - `max_attempts` (INT DEFAULT 1)
+  - `pass_percent` (NUMERIC 5,2 DEFAULT 60.00)
+  - `shuffle_questions` (BOOLEAN DEFAULT false)
+  - `shuffle_options` (BOOLEAN DEFAULT false)
+  - `show_answers_policy` (VARCHAR 30 CHECK IN ('NEVER', 'AFTER_SUBMIT', 'AFTER_DUE') DEFAULT 'AFTER_SUBMIT')
+  - `total_marks` (NUMERIC 6,2 DEFAULT 0.00)
+  - `is_published` (BOOLEAN DEFAULT true)
+  - `created_at`, `updated_at`, `version`
+- `quiz_questions`
+  - `id` (UUID PK)
+  - `quiz_id` (UUID FK -> quizzes.id ON DELETE CASCADE NOT NULL)
+  - `type` (VARCHAR 30 CHECK IN ('SINGLE_CHOICE', 'MULTI_CHOICE', 'TRUE_FALSE', 'SHORT_ANSWER', 'NUMERIC'))
+  - `text` (TEXT NOT NULL)
+  - `marks` (NUMERIC 5,2 DEFAULT 1.00)
+  - `negative_marks` (NUMERIC 5,2 DEFAULT 0.00)
+  - `explanation` (TEXT)
+  - `position` (INT NOT NULL DEFAULT 0)
+  - `correct_text` (TEXT)
+  - `numeric_answer` (NUMERIC 10,4)
+  - `tolerance` (NUMERIC 8,4 DEFAULT 0.0000)
+  - `created_at`, `updated_at`, `version`
+- `quiz_options`
+  - `id` (UUID PK)
+  - `question_id` (UUID FK -> quiz_questions.id ON DELETE CASCADE NOT NULL)
+  - `text` (VARCHAR 500 NOT NULL)
+  - `is_correct` (BOOLEAN DEFAULT false)
+  - `position` (INT NOT NULL DEFAULT 0)
+  - `created_at`, `updated_at`, `version`
+- `quiz_attempts`
+  - `id` (UUID PK)
+  - `quiz_id` (UUID FK -> quizzes.id ON DELETE CASCADE NOT NULL)
+  - `student_id` (UUID NOT NULL)
+  - `attempt_no` (INT DEFAULT 1)
+  - `started_at` (TIMESTAMPTZ NOT NULL DEFAULT NOW())
+  - `expires_at` (TIMESTAMPTZ)
+  - `submitted_at` (TIMESTAMPTZ)
+  - `status` (VARCHAR 30 CHECK IN ('IN_PROGRESS', 'SUBMITTED', 'AUTO_SUBMITTED', 'EXPIRED') DEFAULT 'IN_PROGRESS')
+  - `score` (NUMERIC 6,2)
+  - `percentage` (NUMERIC 5,2)
+  - `passed` (BOOLEAN)
+  - `correct_count` (INT DEFAULT 0)
+  - `wrong_count` (INT DEFAULT 0)
+  - `unanswered_count` (INT DEFAULT 0)
+  - `time_taken_seconds` (INT)
+  - `created_at`, `updated_at`, `version`
+  - `UNIQUE (quiz_id, student_id, attempt_no)`
+- `attempt_answers`
+  - `id` (UUID PK)
+  - `attempt_id` (UUID FK -> quiz_attempts.id ON DELETE CASCADE NOT NULL)
+  - `question_id` (UUID FK -> quiz_questions.id ON DELETE CASCADE NOT NULL)
+  - `selected_option_ids` (TEXT)
+  - `text_answer` (TEXT)
+  - `numeric_answer` (NUMERIC 10,4)
+  - `is_correct` (BOOLEAN)
+  - `marks_awarded` (NUMERIC 6,2 DEFAULT 0.00)
+  - `answered_at` (TIMESTAMPTZ NOT NULL DEFAULT NOW())
+  - `created_at`, `updated_at`, `version`
+  - `UNIQUE (attempt_id, question_id)`
 
 ### Purpose
-The Course Service manages the core learning curriculum: categories, courses, position-ordered modules and lessons, student enrolments, lesson progress tracking (with video auto-completion at 90%), course completion calculation, course ratings & reviews, and assignment authoring, submission versioning, late penalty calculation, and instructor grading workflows.
+The Course Service manages the core learning curriculum: categories, courses, position-ordered modules and lessons, student enrolments, lesson progress tracking (with video auto-completion at 90%), course completion calculation, course ratings & reviews, assignment authoring and grading, and quizzes engine (time-limited attempts, autosaving, negative marking, question/option shuffling, and auto-evaluation across single-choice, multi-choice, true/false, short answer, and numeric questions).
 
 ---
 
