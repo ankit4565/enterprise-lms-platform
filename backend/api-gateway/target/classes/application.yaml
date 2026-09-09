@@ -1,0 +1,79 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # Auth Service
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/v1/auth/**
+
+        # User Service
+        - id: user-service
+          uri: ${USER_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/v1/users/**
+
+        # Course Service
+        - id: course-service
+          uri: ${COURSE_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/courses/**
+
+        # Media Service
+        - id: media-service
+          uri: ${MEDIA_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/v1/media/**
+
+        # Chat Service (REST & WebSocket)
+        - id: chat-service
+          uri: ${CHAT_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/v1/chat/**, /ws/**
+
+        # Notification Service
+        - id: notification-service
+          uri: ${NOTIFICATION_SERVICE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/v1/notifications/**
+
+        # Payment Service
+        - id: payment-service
+          uri: ${PAYMENT_SERVICE_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/v1/payments/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:5173"
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "PUT"
+              - "PATCH"
+              - "DELETE"
+              - "OPTIONS"
+            allowedHeaders: "*"
+            exposedHeaders:
+              - "X-Correlation-Id"
+              - "Authorization"
+            allowCredentials: true
+
+jwt:
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

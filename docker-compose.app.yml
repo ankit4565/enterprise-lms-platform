@@ -1,0 +1,102 @@
+# Enterprise LMS Microservices Application Stack
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.app.yml up -d --build
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: backend/api-gateway/Dockerfile
+    container_name: enterprise-lms-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8081
+      USER_SERVICE_URL: http://user-service:8082
+      COURSE_SERVICE_URL: http://course-service:8083
+      MEDIA_SERVICE_URL: http://media-service:8084
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      course-service:
+        condition: service_healthy
+      media-service:
+        condition: service_healthy
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: backend/auth-service/Dockerfile
+    container_name: enterprise-lms-auth
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lms_auth
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  user-service:
+    build:
+      context: .
+      dockerfile: backend/user-service/Dockerfile
+    container_name: enterprise-lms-user
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lms_user
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  course-service:
+    build:
+      context: .
+      dockerfile: backend/course-service/Dockerfile
+    container_name: enterprise-lms-course
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lms_course
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  media-service:
+    build:
+      context: .
+      dockerfile: backend/media-service/Dockerfile
+    container_name: enterprise-lms-media-svc
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lms_media
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: minioadmin
+      S3_SECRET_KEY: minioadmin
+      S3_BUCKET: enterprise-lms-media
+      CDN_BASE_URL: http://minio:9000/enterprise-lms-media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started

@@ -1,159 +1,70 @@
 package com.enterprise.authservice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.enterprise.common.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @Column(name = "first_name", nullable = false, length = 100)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false, length = 100)
-    private String lastName;
 
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 255)
-    private String password;
+    @Column(name = "password_hash", length = 255)
+    private String passwordHash;
 
+    @Column(name = "full_name", nullable = false, length = 120)
+    private String fullName;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private String role;
+    @Builder.Default
+    private UserStatus status = UserStatus.PENDING_VERIFICATION;
 
-    @Column(name = "is_enabled", nullable = false)
-    private Boolean isEnabled;
+    @Column(name = "email_verified_at")
+    private Instant emailVerifiedAt;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "two_factor_enabled", nullable = false)
+    @Builder.Default
+    private Boolean twoFactorEnabled = false;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "two_factor_secret", length = 64)
+    private String twoFactorSecret;
 
-    // No-Argument Constructor (Required by JPA)
-    public User() {
-    }
+    @Column(name = "failed_login_count", nullable = false)
+    @Builder.Default
+    private Integer failedLoginCount = 0;
 
-    // Parameterized Constructor
-    public User(UUID id, String firstName, String lastName, String email,
-                String password, String role, Boolean isEnabled,
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+    @Column(name = "locked_until")
+    private Instant lockedUntil;
 
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.isEnabled = isEnabled;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    @Column(name = "last_login_at")
+    private Instant lastLoginAt;
 
-    // Getters and Setters
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Stores BCrypt hashed password.
-     * Never store plain text passwords.
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Values such as:
-     * ADMIN
-     * STUDENT
-     * INSTRUCTOR
-     */
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Boolean getIsEnabled() {
-        return isEnabled;
-    }
-
-    public void setIsEnabled(Boolean enabled) {
-        isEnabled = enabled;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                ", isEnabled=" + isEnabled +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 }

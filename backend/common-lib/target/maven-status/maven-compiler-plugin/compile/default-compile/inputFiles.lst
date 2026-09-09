@@ -1,0 +1,13 @@
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/config/JacksonConfig.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/dto/ApiResponse.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/dto/ErrorDetail.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/dto/PageResponse.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/entity/BaseEntity.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/ApiException.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/BadRequestException.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/ErrorCode.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/GlobalExceptionHandler.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/ResourceNotFoundException.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/exception/UnauthorizedException.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/filter/CorrelationIdFilter.java
+/Users/ankitbowade/intellij/enterprise-lms-platform/backend/common-lib/src/main/java/com/enterprise/common/security/SecurityUtils.java

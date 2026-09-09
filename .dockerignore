@@ -1,0 +1,12 @@
+**/.git
+**/.gitignore
+**/.DS_Store
+**/target/
+**/.idea/
+**/*.iml
+**/node_modules/
+**/dist/
+**/build/
+.agents/
+docs/
+*.md

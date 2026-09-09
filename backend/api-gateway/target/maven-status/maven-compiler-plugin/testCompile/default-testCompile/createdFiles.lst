@@ -1,0 +1,4 @@
+com/enterprise/gateway/filter/CorrelationIdGlobalFilterTest.class
+com/enterprise/gateway/security/JwtTokenValidatorTest.class
+com/enterprise/gateway/filter/JwtAuthenticationGlobalFilterTest.class
+com/enterprise/gateway/ApiGatewayApplicationTests.class
